@@ -1,0 +1,3 @@
+return {
+    chanceOfExplosion = 100
+}
