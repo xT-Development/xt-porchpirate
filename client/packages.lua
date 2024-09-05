@@ -39,12 +39,7 @@ function packages.createNewPackage(info, id)
 
     local _, object = Renewed:getObject(('porch_package_%s'):format(id))
 
-    while object and not object.object do
-        _, object = Renewed:getObject(('porch_package_%s'):format(id))
-        Wait(10)
-    end
-
-    return object.object
+    return object
 end
 
 return packages

@@ -40,29 +40,21 @@ end)
 local function setPackageLocations(allPackages)
     if not allPackages then
         for x = 1, #createdPackages do
-            Renewed:removeObject(('porch_package_%s'):format(x))
+            Renewed:removeObject(createdPackages[x].id)
         end
         return
     end
 
     for x = 1, #allPackages do
         if createdPackages[x] then
-            local _, object = Renewed:getObject(('porch_package_%s'):format(x))
+            local _, object = Renewed:getObject(createdPackages[x].objectId)
             if (createdPackages[x].coords ~= allPackages[x].coords) and (object and DoesEntityExist(object.object)) then
-                Renewed:removeObject(('porch_package_%s'):format(x))
+                Renewed:removeObject(createdPackages[x].objectId)
 
-                local newObject = packages.createNewPackage(allPackages[x], x)
-                createdPackages[x] = {
-                    coords = allPackages[x].coords,
-                    entity = newObject
-                }
+                createdPackages[x] = packages.createNewPackage(allPackages[x], x)
             end
         else
-            local newObject = packages.createNewPackage(allPackages[x], x)
-            createdPackages[x] = {
-                coords = allPackages[x].coords,
-                entity = newObject
-            }
+            createdPackages[x] = packages.createNewPackage(allPackages[x], x)
         end
     end
 end
@@ -106,12 +98,16 @@ AddStateBagChangeHandler('stolenPackage', nil, function(bagName, _, value)
     end
 end)
 
+-- Unload objects
+local function unloadPackages()
+    for x = 1, #createdPackages do
+        Renewed:removeObject(createdPackages[x].objectId)
+    end
+end
+
 AddEventHandler('onResourceStop', function(resource)
     if resource ~= GetCurrentResourceName() then return end
-
-    for x = 1, #createdPackages do
-        Renewed:removeObject(('porch_package_%s'):format(x))
-    end
+    unloadPackages()
 end)
 
 AddEventHandler('Renewed-Lib:client:PlayerLoaded', function()
@@ -120,7 +116,5 @@ AddEventHandler('Renewed-Lib:client:PlayerLoaded', function()
 end)
 
 AddEventHandler('Renewed-Lib:client:PlayerUnloaded', function()
-    for x = 1, #createdPackages do
-        Renewed:removeObject(('porch_package_%s'):format(x))
-    end
+    unloadPackages()
 end)
