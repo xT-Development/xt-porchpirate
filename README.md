@@ -24,8 +24,8 @@
     description = "Could be valuable?",
     client = {
         usetime = 3000,
-    }
-    ,server = {
+    },
+    server = {
         export = 'xt-porchpirate.stolen_package'
     }
 },
