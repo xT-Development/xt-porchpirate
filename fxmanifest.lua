@@ -9,7 +9,8 @@ author 'xT Development'
 dependencies = {
     '/onesync',
     'ox_lib',
-    'ox_inventory'
+    'ox_inventory',
+    'Renewed-Lib'
 }
 
 shared_scripts {

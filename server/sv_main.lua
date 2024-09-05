@@ -30,7 +30,6 @@ local function initUnluckyTimer(source)
         local state = Player(source).state
         if state and state.stolenPackage then
             local model = state.stolenPackage.model
-            print(model)
             if exports.ox_inventory:RemoveItem(source, 'stolen_package', 1) then
                 TriggerClientEvent('xt-porchpirate:client:unlucky', source)
                 explosionTimers[source] = nil
@@ -47,7 +46,7 @@ lib.callback.register('xt-porchpirate:server:pickupPackage', function(source, in
     local setLocations = {}
     for x = 1, #globalState.porchPackages do
         if (info.coords == globalState.porchPackages[x].coords) and #(globalState.porchPackages[x].coords - playerCoords) <= 2 then
-            if exports.ox_inventory:AddItem(source, 'stolen_package', 1, { model = info.model }) then
+            if exports.ox_inventory:AddItem(source, 'stolen_package', 1, { model = info.model }) then -- Add item, set model metadata
                 local coords = getRandomCoords(setLocations)
                 while coords == info.coords do
                     coords = getRandomCoords(setLocations)

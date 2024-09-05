@@ -74,7 +74,6 @@ end, {
     }
 })
 
-
 AddEventHandler('onResourceStop', function(resource)
     if resource ~= GetCurrentResourceName() then return end
     exports.ox_inventory:removeHooks(swapHook)

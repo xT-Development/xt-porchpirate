@@ -1,7 +1,19 @@
-# xt-porchpirate
-Porch Pirating for FiveM
+<div align="center">
+  <h1>xt-porchpirate</h1>
+  <a href="https://dsc.gg/xtdev"> <img align="center" src="https://github.com/xT-Development/.github/assets/101474430/d2fbd286-a0d5-4056-95cd-22cb3f526283" /></a><br>
+</div>
 
+## [Preview](https://streamable.com/14b8bu)
 
+# Features:
+- Steal packages from houses around the city
+- Global state to sync locations across players
+- Performant usage of Renewed-Lib to ensure proper creation and removal of props within a distance
+- Random chance package blows up when stolen
+- Receive random loot from packages when opened
+- Forced anim loops to force players to carry the boxes when they are holding them. Shows prop model as well
+
+# Install
 - Add item to ox_inventory
 ```lua
 ["stolen_package"] = {
