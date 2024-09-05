@@ -48,8 +48,10 @@ local function setPackageLocations(allPackages)
     for x = 1, #allPackages do
         if createdPackages[x] then
             local _, object = Renewed:getObject(createdPackages[x].objectId)
-            if (createdPackages[x].coords ~= allPackages[x].coords) and (object and DoesEntityExist(object.object)) then
-                Renewed:removeObject(createdPackages[x].objectId)
+            if (createdPackages[x].coords ~= allPackages[x].coords) then
+                if (object and DoesEntityExist(object.object)) then
+                    Renewed:removeObject(createdPackages[x].objectId)
+                end
 
                 createdPackages[x] = packages.createNewPackage(allPackages[x], x)
             end
