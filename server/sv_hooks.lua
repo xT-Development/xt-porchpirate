@@ -6,7 +6,6 @@ local swapHook = exports.ox_inventory:registerHook('swapItems', function(payload
         local metadata = payload.fromSlot.metadata
         if state and metadata then
             state:set('stolenPackage', {
-                object = false,
                 hasPackage = true,
                 model = metadata.model
             }, true)
@@ -27,7 +26,6 @@ local swapHook = exports.ox_inventory:registerHook('swapItems', function(payload
                 for i = 1, #models do
                     if (info.metadata and info.metadata.model) and (info.metadata.model == models[i].model) then
                         state:set('stolenPackage', {
-                            object = false,
                             hasPackage = true,
                             model = models[i].model
                         }, true)
@@ -52,7 +50,6 @@ local createHook = exports.ox_inventory:registerHook('createItem', function(payl
         local metadata = payload.metadata
         if state and metadata then
             state:set('stolenPackage', {
-                object = false,
                 hasPackage = true,
                 model = metadata.model
             }, true)

@@ -11,29 +11,41 @@ function utils.getModelAttachInfo(model)
     end
 end
 
-function utils.attachBox(model)
-    local coords = GetEntityCoords(cache.ped)
+function utils.attachBoxToPlayer(model, package, ped)
     local pos, rot = utils.getModelAttachInfo(model)
+    AttachEntityToEntity(package, ped, GetPedBoneIndex(ped, 60309), pos.x, pos.y, pos.z, rot.x, rot.y, rot.z, true, true, false, true, 1, true)
+end
 
-    Renewed:addObject({
-        id = 'stolen_package',
-        model = model,
-        coords = coords,
-        freeze = false,
-        snapGround  = false,
-        colissions = false,
-    })
+function utils.createCarryingModel(model)
+    lib.requestModel(model, 1000)
+    local newPackage = CreateObject(model, 0.0, 0.0, 0.0, false, false, false)
+    SetModelAsNoLongerNeeded(model)
+    return newPackage
+end
 
-    local _, object = Renewed:getObject('stolen_package')
+-- Credit: https://github.com/Renewed-Scripts/Renewed-Weaponscarry/blob/main/modules/utils.lua#L150
+function utils.getEntityFromStateBag(bagName, keyName)
 
-    while object and not object.object do
-        _, object = Renewed:getObject('stolen_package')
-        Wait(10)
+    if bagName:find('entity:') then
+        local netId = tonumber(bagName:gsub('entity:', ''), 10)
+
+        local entity =  lib.waitFor(function()
+            if NetworkDoesEntityExistWithNetworkId(netId) then return NetworkGetEntityFromNetworkId(netId) end
+        end, ('%s received invalid entity! (%s)'):format(keyName, bagName), 10000)
+
+        return entity
+    elseif bagName:find('player:') then
+        local serverId = tonumber(bagName:gsub('player:', ''), 10)
+        local playerId = GetPlayerFromServerId(serverId)
+
+        local entity = lib.waitFor(function()
+            local ped = GetPlayerPed(playerId)
+            if ped > 0 then return ped end
+        end, ('%s received invalid entity! (%s)'):format(keyName, bagName), 10000)
+
+        return serverId, entity
     end
 
-    AttachEntityToEntity(object.object, cache.ped, GetPedBoneIndex(cache.ped, 60309), pos.x, pos.y, pos.z, rot.x, rot.y, rot.z, true, true, false, true, 1, true)
-
-    return object.object
 end
 
 local DisableControlAction = DisableControlAction

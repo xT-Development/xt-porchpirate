@@ -69,9 +69,19 @@ lib.callback.register('xt-porchpirate:server:pickupPackage', function(source, in
 
     globalState.porchPackages = setLocations
 
-    local unluckyChance = math.random(1, 100)
-    if pickedUp and unluckyChance <= config.chanceOfExplosion then
-        initUnluckyTimer(source)
+    if pickedUp then
+        local state = Player(source).state
+        if state then
+            state:set('stolenPackage', {
+                model = info.model,
+                hasPackage = true
+            }, true)
+        end
+
+        local unluckyChance = math.random(1, 100)
+        if unluckyChance <= config.chanceOfExplosion then
+            initUnluckyTimer(source)
+        end
     end
 
     return pickedUp
@@ -82,6 +92,10 @@ exports('stolen_package', function(event, item, inventory, slot, data)
     if event == 'usedItem' then
         local randomItem = config.packageItems[math.random(#config.packageItems)]
         if exports.ox_inventory:AddItem(inventory.id, randomItem[1], randomItem[2]) then
+            local state = Player(inventory.id).state
+            if state then
+                state:set('stolenPackage', nil, true)
+            end
             return true
         end
         return
