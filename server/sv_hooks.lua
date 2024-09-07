@@ -1,20 +1,5 @@
 local models = lib.load('configs.models')
 
-local hookId = exports.ox_inventory:registerHook('swapItems', function(payload)
-    return false
-end, {
-    print = false,
-    itemFilter = {
-        stolen_package = true,
-    },
-    inventoryFilter = {
-        '^glove[%w]+',
-        '^trunk[%w]+',
-        '^drop-[%w]+',
-        '^newdrop$'
-    }
-})
-
 local swapHook = exports.ox_inventory:registerHook('swapItems', function(payload)
     if (payload.toInventory == payload.source) then
         local state = Player(payload.source).state
@@ -89,6 +74,5 @@ end, {
 AddEventHandler('onResourceStop', function(resource)
     if resource ~= GetCurrentResourceName() then return end
     exports.ox_inventory:removeHooks(swapHook)
-    exports.ox_inventory:removeHooks(hookId)
     exports.ox_inventory:removeHooks(createHook)
 end)
