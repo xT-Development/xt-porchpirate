@@ -1,22 +1,8 @@
 local config = lib.load('configs.server')
 local models = lib.load('configs.models')
 local globalState = GlobalState
-local explosionTimers = {}
 
-local hookId = exports.ox_inventory:registerHook('swapItems', function(payload)
-    if explosionTimers[payload.source] then return false end
-end, {
-    print = false,
-    itemFilter = {
-        stolen_package = true,
-    },
-    inventoryFilter = {
-        '^glove[%w]+',
-        '^trunk[%w]+',
-        '^drop-[%w]+',
-        '^newdrop$'
-    }
-})
+explosionTimers = {}
 
 -- Get random location
 local function getRandomCoords(table)
