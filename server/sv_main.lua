@@ -1,7 +1,8 @@
 local config = lib.load('configs.server')
 local models = lib.load('configs.models')
 local globalState = GlobalState
-local explosionTimers = {}
+
+explosionTimers = {}
 
 -- Get random location
 local function getRandomCoords(table)
@@ -125,6 +126,7 @@ end)
 
 AddEventHandler('onResourceStop', function(resource)
     if resource ~= GetCurrentResourceName() then return end
+    exports.ox_inventory:removeHooks(hookId)
 
     globalState.porchPackages = false
 end)

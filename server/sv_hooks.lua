@@ -1,6 +1,8 @@
 local models = lib.load('configs.models')
 
 local swapHook = exports.ox_inventory:registerHook('swapItems', function(payload)
+    if explosionTimers and explosionTimers[payload.source] then return false end
+
     if (payload.toInventory == payload.source) then
         local state = Player(payload.source).state
         local metadata = payload.fromSlot.metadata

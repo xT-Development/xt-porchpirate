@@ -22,7 +22,8 @@ client_scripts {
 }
 
 server_scripts {
-    'server/*.lua'
+    'server/sv_main.lua',
+    'server/sv_hooks.lua',
 }
 
 files {
