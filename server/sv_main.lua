@@ -120,8 +120,6 @@ AddEventHandler('onResourceStart', function(resource)
     end
 
     globalState.porchPackages = setLocations
-
-    lib.print.info(setLocations)
 end)
 
 AddEventHandler('onResourceStop', function(resource)
