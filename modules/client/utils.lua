@@ -1,12 +1,21 @@
-local Renewed = exports['Renewed-Lib']
-local models = lib.load('configs.models')
+local PACKAGE_MODELS = lib.require('configs.models')
+
+local GetPlayerPed = GetPlayerPed
+local CreateObject = CreateObject
+local GetPedBoneIndex = GetPedBoneIndex
+local DisableControlAction = DisableControlAction
+local AttachEntityToEntity = AttachEntityToEntity
+local GetPlayerFromServerId= GetPlayerFromServerId
+local SetModelAsNoLongerNeeded = SetModelAsNoLongerNeeded
+local NetworkGetEntityFromNetworkId = NetworkGetEntityFromNetworkId
+local NetworkDoesEntityExistWithNetworkId = NetworkDoesEntityExistWithNetworkId
 
 local utils = {}
 
 function utils.getModelAttachInfo(model)
-    for x = 1, #models do
-        if models[x].model == model then
-            return models[x].pos, models[x].rot
+    for x = 1, #PACKAGE_MODELS do
+        if PACKAGE_MODELS[x].model == model then
+            return PACKAGE_MODELS[x].pos, PACKAGE_MODELS[x].rot
         end
     end
 end
@@ -20,6 +29,7 @@ function utils.createCarryingModel(model)
     lib.requestModel(model, 1000)
     local newPackage = CreateObject(model, 0.0, 0.0, 0.0, false, false, false)
     SetModelAsNoLongerNeeded(model)
+
     return newPackage
 end
 
@@ -48,7 +58,6 @@ function utils.getEntityFromStateBag(bagName, keyName)
 
 end
 
-local DisableControlAction = DisableControlAction
 function utils.disableControls()
     DisableControlAction(0, 22, true) -- Jump
     DisableControlAction(0, 23, true) -- F / Enter
