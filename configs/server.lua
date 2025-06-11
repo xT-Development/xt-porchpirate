@@ -66,7 +66,7 @@ return {
         vec3(1052.29, -470.82, 63.89),
         vec3(1061.02, -378.75, 68.23),
 
-        -- Nikola Ave 
+        -- Nikola Ave
         vec3(920.01, -570.06, 58.37),
         vec3(966.20, -543.41, 59.35),
         vec3(988.78, -527.32, 60.47),
@@ -74,11 +74,13 @@ return {
 
     },
 
+    managePackagesPermission = 'admin',
+
     packageItems = {                        -- Items received from opeing packages
         { 'water', 1 }
     },
 
-    chanceOfExplosion = 35,                -- Check of explosion from package
+    chanceOfExplosion = 35,                 -- Check of explosion from package
 
     timeUntilExplosion = {                  -- Length of time until the package explodes if its rigged
         min = 5,
