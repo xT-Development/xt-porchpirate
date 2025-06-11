@@ -13,19 +13,17 @@ dependencies = {
     'Renewed-Lib'
 }
 
-shared_scripts {
-    '@ox_lib/init.lua',
-}
+shared_scripts { '@ox_lib/init.lua', '@Renewed-Lib/init.lua' }
 
 client_scripts {
     'client/*.lua'
 }
 
 server_scripts {
-    'server/sv_main.lua',
-    'server/sv_hooks.lua',
+    'server/*.lua'
 }
 
 files {
     'configs/*.lua',
+    'modules/**/*.lua'
 }
