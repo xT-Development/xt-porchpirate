@@ -1,7 +1,10 @@
-local models = lib.load('configs.models')
+local MODELS        = lib.require('configs.models')
+local EXPLOSIONS    = lib.require('modules.server.explosions')
+local OX_INV        = exports.ox_inventory
 
-local swapHook = exports.ox_inventory:registerHook('swapItems', function(payload)
-    if explosionTimers and explosionTimers[payload.source] then return false end
+local swapHook = OX_INV:registerHook('swapItems', function(payload)
+    local timer = EXPLOSIONS.getPlayerTimer(payload.source)
+    if timer then return false end
 
     if (payload.toInventory == payload.source) then
         local state = Player(payload.source).state
@@ -20,16 +23,17 @@ local swapHook = exports.ox_inventory:registerHook('swapItems', function(payload
         end
 
         -- If player has another package, force into anim
-        local playerItems = exports.ox_inventory:GetInventoryItems(payload.source)
+        local playerItems = OX_INV:GetInventoryItems(payload.source)
         local fromSlot = type(payload.fromSlot) == 'number' and payload.fromSlot or payload.fromSlot.slot
 
         for slot, info in pairs(playerItems) do
             if info and fromSlot ~= slot then
-                for i = 1, #models do
-                    if (info.metadata and info.metadata.model) and (info.metadata.model == models[i].model) then
+                for i = 1, #MODELS do
+                    if (info.metadata and info.metadata.model) and (info.metadata.model == MODELS[i].model) then
                         state:set('stolenPackage', {
                             hasPackage = true,
-                            model = models[i].model
+                            model = MODELS[i].model,
+                            explode = false
                         }, true)
                         return true
                     end
@@ -46,20 +50,21 @@ end, {
     },
 })
 
-local createHook = exports.ox_inventory:registerHook('createItem', function(payload)
+local createHook = OX_INV:registerHook('createItem', function(payload)
     if payload.inventoryId and type(payload.inventoryId) == 'number' then
         local state = Player(payload.inventoryId).state
         local metadata = payload.metadata
         if state and metadata then
             state:set('stolenPackage', {
                 hasPackage = true,
-                model = metadata.model
+                model = metadata.model,
+                explode = false
             }, true)
         end
 
-        for x = 1, #models do
-            if metadata.model == models[x].model then
-                metadata.label = models[x].label or 'Package'
+        for x = 1, #MODELS do
+            if metadata.model == MODELS[x].model then
+                metadata.label = MODELS[x].label or 'Package'
                 return metadata
             end
         end
@@ -75,6 +80,7 @@ end, {
 
 AddEventHandler('onResourceStop', function(resource)
     if resource ~= GetCurrentResourceName() then return end
-    exports.ox_inventory:removeHooks(swapHook)
-    exports.ox_inventory:removeHooks(createHook)
+
+    OX_INV:removeHooks(swapHook)
+    OX_INV:removeHooks(createHook)
 end)
